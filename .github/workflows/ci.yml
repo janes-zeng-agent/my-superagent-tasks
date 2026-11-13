@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  sanity:
+    name: Repo sanity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: List tracked files
+        run: |
+          echo "Files at repository root:"
+          git ls-files
+      - name: Reject oversized files
+        run: |
+          big=$(find . -path ./.git -prune -o -type f -size +1M -print)
+          if [ -n "$big" ]; then
+            echo "Oversized files detected:"
+            echo "$big"
+            exit 1
+          fi
+      - name: Reject merge-conflict markers
+        run: |
+          if git grep -nE '^(<<<<<<<|=======|>>>>>>>)' -- . ; then
+            echo "Merge-conflict markers found"
+            exit 1
+          fi

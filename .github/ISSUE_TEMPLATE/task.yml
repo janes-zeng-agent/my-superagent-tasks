@@ -1,0 +1,27 @@
+name: 任务
+description: 给智能体下达一个明确、可验证的任务
+title: "[task] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        在下面正文里 **@janes-zeng-agent** 并写清目标与验收标准，例如：
+        `@janes-zeng-agent 在根目录创建 demo.txt，内容写 "hello"。`
+        智能体只处理明确、可验证的请求；含糊请求会被忽略。
+  - type: textarea
+    id: task
+    attributes:
+      label: 任务内容
+      description: 需要智能体做什么？请写明目标文件/位置。
+      placeholder: '@janes-zeng-agent 在根目录创建 demo.txt，内容写 "hello"。'
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+      description: 怎样算完成？
+      placeholder: 看到 demo.txt，且内容为 hello
+    validations:
+      required: false
